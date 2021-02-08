@@ -1,0 +1,16 @@
+export const ColorScheme = {
+  primary: '#0E7AFE',
+  white: 'white',
+  warning: 'orange',
+  gray: 'dimgray',
+  grayLight: '#80808050',
+  disabled: 'gray',
+  placeholderColor: 'dimgray',
+  error: 'red',
+  success: 'green',
+  transparent: 'transparent',
+  black: 'black',
+  fb: '#3b5998',
+  google: '#DB4437',
+  red: 'red',
+};
