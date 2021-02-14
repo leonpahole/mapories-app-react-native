@@ -7,8 +7,10 @@ import Main from './src/Main';
 import store from './src/redux/store';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {MAPBOX_TOKEN} from '@env';
+import ChatSocketProvider from './src/socket/ChatSocket';
 
 import {GoogleSignin} from '@react-native-community/google-signin';
+import {navigationRef} from './src/navigation/RootNavigation';
 
 GoogleSignin.configure();
 MapboxGL.setAccessToken(MAPBOX_TOKEN);
@@ -37,9 +39,11 @@ const App = () => {
   }, []);
 
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Provider store={store}>
-        <Main />
+        <ChatSocketProvider>
+          <Main />
+        </ChatSocketProvider>
       </Provider>
     </NavigationContainer>
   );

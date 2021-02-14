@@ -23,16 +23,17 @@ const styles = StyleSheet.create({
   },
 });
 
-type MarkerData = MapLocation & {id: any};
+export type MarkerData = MapLocation & {id: any};
 
 export type IMapProps = {
   center?: MapLocation;
   markers?: MarkerData[];
-  onPress?(): void;
+  onPress?(l?: MapLocation): void;
   style?: StyleProp<ViewStyle>;
   zoomEnabled?: boolean;
   scrollEnabled?: boolean;
   zoom?: number;
+  zoomOnPress?: boolean;
   onMarkerPress?(id: any): void;
 };
 
@@ -44,9 +45,26 @@ const Map: React.FC<IMapProps> = ({
   zoomEnabled = false,
   scrollEnabled = false,
   zoom = 9,
+  zoomOnPress = false,
   onMarkerPress,
 }) => {
   const [loading, setLoading] = useState<boolean>(true);
+  const [zoomLevel, setZoomLevel] = useState<number>(zoom);
+  const [cameraCoordinate, setCameraCoordinate] = useState<
+    [number, number] | undefined
+  >(undefined);
+
+  useEffect(() => {
+    setZoomLevel(zoom);
+  }, [zoom]);
+
+  useEffect(() => {
+    if (center) {
+      setCameraCoordinate([center.longitude, center.latitude]);
+    } else {
+      setCameraCoordinate(undefined);
+    }
+  }, [center]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -58,15 +76,30 @@ const Map: React.FC<IMapProps> = ({
     <View style={[styles.container, style]}>
       <MapboxGL.MapView
         style={[styles.map, {display: loading ? 'none' : 'flex'}]}
-        onPress={() => onPress && onPress()}
+        onPress={(feature: any) => {
+          let mapLocation: MapLocation | undefined = undefined;
+          if (
+            feature.geometry.coordinates &&
+            feature.geometry.coordinates.length >= 2
+          ) {
+            mapLocation = {
+              latitude: feature.geometry.coordinates[1],
+              longitude: feature.geometry.coordinates[0],
+            };
+          }
+
+          if (zoomOnPress) {
+            setZoomLevel(15);
+          }
+
+          onPress && onPress(mapLocation);
+        }}
         zoomEnabled={zoomEnabled}
         scrollEnabled={scrollEnabled}>
         <MapboxGL.Camera
           animationDuration={0}
-          zoomLevel={zoom}
-          centerCoordinate={
-            center ? [center.longitude, center.latitude] : undefined
-          }
+          zoomLevel={zoomLevel}
+          centerCoordinate={cameraCoordinate}
         />
         <View>
           {markers.map((c) => (

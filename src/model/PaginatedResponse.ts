@@ -22,3 +22,8 @@ export interface PaginationData<T> {
   data: T[];
   pagination: PaginationInfo;
 }
+
+export interface CursorPaginatedResponse<T> {
+  data: T[];
+  cursor: number | null;
+}

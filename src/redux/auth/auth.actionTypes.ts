@@ -5,7 +5,7 @@ export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 
 export interface LoginSuccess {
   type: typeof LOGIN_SUCCESS;
-  payload: UserExcerpt;
+  payload: {user: UserExcerpt; accessToken: string};
 }
 
 export interface LogoutSuccess {

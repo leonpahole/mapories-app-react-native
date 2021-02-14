@@ -4,6 +4,8 @@ export const ColorScheme = {
   warning: 'orange',
   gray: 'dimgray',
   grayLight: '#80808050',
+  grayLightOpacity: '#808080',
+  almostWhite: '#F5F5F5',
   disabled: 'gray',
   placeholderColor: 'dimgray',
   error: 'red',

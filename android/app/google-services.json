@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "907139648595",
+    "project_id": "mapories-6d2dd",
+    "storage_bucket": "mapories-6d2dd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907139648595:android:b6f97c66b69f7108644aa6",
+        "android_client_info": {
+          "package_name": "com.maporiesapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "907139648595-ki385scc4densrgsdq5b8d14a9er4jqt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqMAaOw9IwUxGInYFXPdu7wHQ2QfA0c98"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "907139648595-ki385scc4densrgsdq5b8d14a9er4jqt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -4,6 +4,7 @@ import {View, Text} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {Comment} from '../../model/Comment';
 import {ColorScheme} from '../../styles/colors';
+import {fromNowText} from '../../util/dateUtil';
 import {Avatar} from '../common/Avatar';
 import {LikeCommentButton} from './LikeCommentButton';
 
@@ -37,7 +38,7 @@ const PostCommentListItem: React.FC<IPostCommentListItemProps> = ({
           <View style={{marginLeft: 10}}>
             <Text style={{fontWeight: 'bold'}}>{comment.author.name}</Text>
             <Text style={{color: ColorScheme.gray}}>
-              Posted {dayjs(comment.postedAt).fromNow()}
+              Posted {fromNowText(comment.postedAt)}
             </Text>
           </View>
         </View>

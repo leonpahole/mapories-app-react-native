@@ -8,8 +8,3 @@ export type MapLocation = {
   latitude: number;
   longitude: number;
 };
-
-export type MarkerData = {
-  location: MapLocation;
-  id: string;
-};

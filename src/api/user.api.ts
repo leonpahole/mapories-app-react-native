@@ -1,6 +1,6 @@
 import {PaginatedResponse} from '../model/PaginatedResponse';
 import {UserExcerpt, UserProfile} from '../model/UserExcerpt';
-import {getRequest} from './api';
+import {getRequest, postRequest} from './api';
 
 export const searchUsers = async (
   q: string,
@@ -19,4 +19,10 @@ export const getMyProfile = async (): Promise<UserProfile> => {
 
 export const getUserProfile = async (userId: string): Promise<UserProfile> => {
   return getRequest<UserProfile>(`/user/${userId}`, true);
+};
+
+export const subscribeToMobilePush = async (token: string): Promise<void> => {
+  return postRequest<void>(`/push/subscribe-mobile`, {
+    registrationToken: token,
+  });
 };

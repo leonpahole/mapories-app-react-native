@@ -8,6 +8,7 @@ import {Profile} from '../screens/Profile';
 import {UserSearch} from '../screens/user/UserSearch';
 import {ColorScheme} from '../styles/colors';
 import {NavigatorScreen} from '../types/navigator';
+import {ChatStackNavigator} from './ChatStackNavigator';
 import {FeedNavigator} from './FeedNavigator';
 import {RootNavigatorScreens} from './RootNavigator';
 
@@ -16,7 +17,7 @@ export const MainTopTabNavigatorScreens = {
   GlobalMapPlaceholder: 'GlobalMapPlaceholder' as const,
   UserSearch: 'UserSearch' as const,
   Profile: 'Profile' as const,
-  ChatOverview: 'ChatOverview' as const,
+  ChatStackNavigator: 'ChatStackNavigator' as const,
 };
 
 export type MainTopTabNavigatorParams = {
@@ -24,7 +25,7 @@ export type MainTopTabNavigatorParams = {
   [MainTopTabNavigatorScreens.GlobalMapPlaceholder]: undefined;
   [MainTopTabNavigatorScreens.UserSearch]: undefined;
   [MainTopTabNavigatorScreens.Profile]: undefined;
-  [MainTopTabNavigatorScreens.ChatOverview]: undefined;
+  [MainTopTabNavigatorScreens.ChatStackNavigator]: undefined;
 };
 
 const MainTopTab = createMaterialTopTabNavigator();
@@ -79,10 +80,10 @@ const MainTopTabNavigator: React.FC = ({}) => {
       },
     },
     {
-      name: MainTopTabNavigatorScreens.ChatOverview,
-      component: ChatOverview,
+      name: MainTopTabNavigatorScreens.ChatStackNavigator,
+      component: ChatStackNavigator,
       options: {
-        title: 'Chat',
+        title: 'ChatStackNavigator',
         tabBarIcon: ({color}: any) => (
           <Icon name="comment" size={20} color={color} />
         ),

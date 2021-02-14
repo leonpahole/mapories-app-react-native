@@ -2,9 +2,17 @@ import React from 'react';
 import {Image, Text, View} from 'react-native';
 import {ColorScheme} from '../styles/colors';
 import {useLoggedInUser} from '../hooks/useLoggedInUser';
+import {useNavigation} from '@react-navigation/native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {Logo} from './Logo';
 
-const Header: React.FC = ({}) => {
-  const loggedInUser = useLoggedInUser();
+interface HeaderProps {
+  title?: string;
+}
+
+const Header: React.FC<HeaderProps> = ({title}) => {
+  const navigation = useNavigation<any>();
 
   return (
     <View
@@ -16,22 +24,15 @@ const Header: React.FC = ({}) => {
         justifyContent: 'space-between',
         alignItems: 'center',
       }}>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}>
-        <Image
-          style={{height: 30, width: 30, marginRight: 10}}
-          source={require('../assets/map.png')}
-        />
-        <Text
-          style={{fontSize: 25, color: ColorScheme.gray, fontWeight: 'bold'}}>
-          Mapories
-        </Text>
-      </View>
+      <Logo title={title} />
 
-      <Text style={{color: ColorScheme.gray}}>{loggedInUser?.name}</Text>
+      <TouchableOpacity
+        style={{marginRight: 10}}
+        onPress={() => {
+          navigation.toggleDrawer();
+        }}>
+        <Icon name="bars" size={25} color={ColorScheme.gray} />
+      </TouchableOpacity>
     </View>
   );
 };

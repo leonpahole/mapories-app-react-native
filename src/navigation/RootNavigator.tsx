@@ -3,10 +3,12 @@ import {
   createStackNavigator,
 } from '@react-navigation/stack';
 import React from 'react';
-import {MapLocation, MarkerData} from '../model/MaporyMapItem';
+import {MarkerData} from '../components/map/Map';
+import {MapLocation} from '../model/MaporyMapItem';
 import {GalleryScreen} from '../screens/common/GalleryScreen';
 import {MapScreen} from '../screens/common/MapScreen';
 import {GlobalMap} from '../screens/GlobalMap';
+import {MapLocationPicker} from '../screens/MapLocationPicker';
 import {CreatePost} from '../screens/post/CreatePost';
 import {NavigatorScreen} from '../types/navigator';
 import {MainTopTabNavigator} from './MainTopTabNavigator';
@@ -17,6 +19,7 @@ export const RootNavigatorScreens = {
   GalleryScreen: 'GalleryScreen' as const,
   MapScreen: 'MapScreen' as const,
   GlobalMap: 'GlobalMap' as const,
+  MapLocationPicker: 'MapLocationPicker' as const,
   CreatePost: 'CreatePost' as const,
   SideStack: 'SideStack' as const,
 };
@@ -31,6 +34,10 @@ export type RootNavigatorParamList = {
     markers: MarkerData[];
   };
   [RootNavigatorScreens.GlobalMap]: undefined;
+  [RootNavigatorScreens.MapLocationPicker]: {
+    preselectedLocation?: MapLocation;
+    onSelect(location?: MapLocation): void;
+  };
   [RootNavigatorScreens.CreatePost]: undefined;
   [RootNavigatorScreens.SideStack]: undefined;
 };
@@ -63,6 +70,14 @@ const RootNavigator: React.FC = ({}) => {
     {
       name: RootNavigatorScreens.GlobalMap,
       component: GlobalMap,
+      options: {
+        animationEnabled: true,
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      },
+    },
+    {
+      name: RootNavigatorScreens.MapLocationPicker,
+      component: MapLocationPicker,
       options: {
         animationEnabled: true,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,

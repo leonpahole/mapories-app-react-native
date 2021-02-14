@@ -73,7 +73,7 @@ export const onLogin = async (
 ) => {
   await AsyncStorage.setItem(authTokenKey, loginResponse.accessToken);
   await AsyncStorage.setItem(refreshTokenKey, loginResponse.refreshToken);
-  dispatch(loginAction(loginResponse.user));
+  dispatch(loginAction(loginResponse.user, loginResponse.accessToken));
 };
 
 export const onLogout = async (dispatch: Dispatch<any>) => {

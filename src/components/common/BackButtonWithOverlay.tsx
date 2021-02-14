@@ -7,11 +7,13 @@ import {ColorScheme} from '../../styles/colors';
 interface BackButtonWithOverlayProps {
   textColor?: string;
   backgroundColor?: string;
+  backText?: string;
 }
 
 const BackButtonWithOverlay: React.FC<BackButtonWithOverlayProps> = ({
   textColor = ColorScheme.white,
   backgroundColor = '#000000AF',
+  backText = 'Back',
 }) => {
   const navigation = useNavigation<any>();
 
@@ -30,7 +32,7 @@ const BackButtonWithOverlay: React.FC<BackButtonWithOverlayProps> = ({
           opacity: 1,
         }}
         pressColorAndroid={ColorScheme.transparent}
-        label={'Back'}
+        label={backText}
         labelVisible={true}
         labelStyle={{
           fontWeight: 'bold',

@@ -3,11 +3,9 @@ import {Text, View} from 'react-native';
 import {Post} from '../../model/Post';
 import {Avatar} from './Avatar';
 import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import {ColorScheme} from '../../styles/colors';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-
-dayjs.extend(relativeTime);
+import {fromNowText} from '../../util/dateUtil';
 
 export type IAuthorHeaderProps = {
   post: Post;
@@ -50,7 +48,7 @@ const AuthorHeader: React.FC<IAuthorHeaderProps> = ({
             <Text style={{color: ColorScheme.gray}}>{placeText}</Text>
           )}
           <Text style={{color: ColorScheme.gray}}>
-            Posted {dayjs(post.post.createdAt).fromNow()}
+            Posted {fromNowText(post.post.createdAt)}
           </Text>
         </TouchableWithoutFeedback>
       </View>

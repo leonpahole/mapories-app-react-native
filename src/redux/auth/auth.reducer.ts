@@ -7,10 +7,12 @@ import {
 
 interface AuthStateI {
   loggedInUser?: UserExcerpt;
+  accessToken?: string;
 }
 
 const defaultState: AuthStateI = {
   loggedInUser: undefined,
+  accessToken: undefined,
 };
 
 const authReducer = (
@@ -21,12 +23,14 @@ const authReducer = (
     case LOGIN_SUCCESS:
       return {
         ...state,
-        loggedInUser: action.payload,
+        loggedInUser: action.payload.user,
+        accessToken: action.payload.accessToken,
       };
     case LOGOUT_SUCCESS:
       return {
         ...state,
         loggedInUser: undefined,
+        accessToken: undefined,
       };
     default:
       return state;

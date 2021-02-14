@@ -8,6 +8,7 @@ import {ScrollView, Switch} from 'react-native-gesture-handler';
 import * as Yup from 'yup';
 import {createPost, updatePicturesForPost} from '../../api/post.api';
 import {BackButtonWithOverlay} from '../../components/common/BackButtonWithOverlay';
+import MyDatePicker from '../../components/input/MyDatePicker';
 import MyRatingPicker from '../../components/input/MyRatingPicker';
 import MySwitch from '../../components/input/MySwitch';
 import MyTextInput from '../../components/input/MyTextInput';
@@ -19,28 +20,19 @@ import {
   FormikContainer,
 } from '../../components/styled/layout/FormContainer';
 import {HeadingText} from '../../components/styled/typography/HeadingText';
+import {InputError} from '../../components/styled/typography/InputError';
 import {InputLabel} from '../../components/styled/typography/InputLabel';
 import {MapLocation} from '../../model/MaporyMapItem';
 import {CreateOrUpdatePostData} from '../../model/Post';
+import {RootNavigatorScreens} from '../../navigation/RootNavigator';
 import {ColorScheme} from '../../styles/colors';
 
 const CreatePost: React.FC = ({}) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [pictures, setPictures] = useState<string[]>([]);
 
-  const [location, setLocation] = useState<MapLocation | null>(null);
-
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
-
-  useEffect(() => {
-    Geolocation.getCurrentPosition((info) =>
-      setLocation({
-        latitude: info.coords.latitude,
-        longitude: info.coords.longitude,
-      }),
-    );
-  }, []);
 
   return (
     <ScrollView keyboardShouldPersistTaps={'always'}>
@@ -57,12 +49,16 @@ const CreatePost: React.FC = ({}) => {
             rating: number;
             placeName: string;
             isMapory: boolean;
+            location: MapLocation | undefined;
+            dateOfVisit: Date;
           }>
             initialValues={{
               content: '',
               rating: 0,
               placeName: '',
               isMapory: false,
+              location: undefined,
+              dateOfVisit: new Date(),
             }}
             onSubmit={async (values, {resetForm}) => {
               setLoading(true);
@@ -77,11 +73,11 @@ const CreatePost: React.FC = ({}) => {
 
                 if (values.isMapory) {
                   data.mapory = {
-                    latitude: location!.latitude,
-                    longitude: location!.longitude,
+                    latitude: values.location!.latitude,
+                    longitude: values.location!.longitude,
                     placeName: values.placeName,
                     rating: values.rating,
-                    visitDate: new Date(),
+                    visitDate: values.dateOfVisit,
                   };
                 }
 
@@ -126,8 +122,16 @@ const CreatePost: React.FC = ({}) => {
                   )
                   .required('Please enter place name.'),
               }),
+              location: Yup.object().when('isMapory', {
+                is: true,
+                then: Yup.object().required('Please select location.'),
+              }),
+              dateOfVisit: Yup.date().when('isMapory', {
+                is: true,
+                then: Yup.date().required('Please select date of visit.'),
+              }),
             })}>
-            {({handleSubmit, values}) => (
+            {({handleSubmit, values, setFieldValue, errors, touched}) => (
               <FormikContainer>
                 <MyTextInput
                   name={'content'}
@@ -161,9 +165,41 @@ const CreatePost: React.FC = ({}) => {
                       placeholder={'Place name...'}
                     />
 
-                    <Map
-                      center={location || undefined}
-                      markers={location ? [{...location, id: '1'}] : []}
+                    <View style={{marginTop: 10}}>
+                      <InputLabel>Tap on map to select location.</InputLabel>
+                      {touched.location && errors.location && (
+                        <InputError>Please select location.</InputError>
+                      )}
+                      <Map
+                        style={{marginTop: 5}}
+                        center={
+                          values.location || {latitude: 30, longitude: 31}
+                        }
+                        zoom={values.location ? 5 : 0}
+                        markers={
+                          values.location ? [{...values.location, id: '1'}] : []
+                        }
+                        onPress={() => {
+                          navigation.navigate(
+                            RootNavigatorScreens.MapLocationPicker,
+                            {
+                              preselectedLocation: values.location || undefined,
+                              onSelect: (l?: MapLocation) => {
+                                if (l) {
+                                  setFieldValue('location', l);
+                                }
+                              },
+                            },
+                          );
+                        }}
+                      />
+                    </View>
+
+                    <MyDatePicker
+                      containerStyle={{marginTop: 10}}
+                      name={'dateOfVisit'}
+                      label={'Date'}
+                      maxDate={new Date()}
                     />
                   </>
                 )}
