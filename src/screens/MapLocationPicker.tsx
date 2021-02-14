@@ -2,7 +2,12 @@ import Geolocation from '@react-native-community/geolocation';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {useEffect} from 'react';
-import {ToastAndroid, useWindowDimensions, View} from 'react-native';
+import {
+  PermissionsAndroid,
+  ToastAndroid,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import {getFeedMapData} from '../api/post.api';
 import {BackButtonWithOverlay} from '../components/common/BackButtonWithOverlay';
 import {Map} from '../components/map/Map';
@@ -32,13 +37,35 @@ const MapLocationPicker: React.FC = () => {
     setLocation(route.params.preselectedLocation);
   }, [route.params.preselectedLocation]);
 
-  const useMyLocation = () => {
-    Geolocation.getCurrentPosition((info) =>
-      setLocation({
-        latitude: info.coords.latitude,
-        longitude: info.coords.longitude,
-      }),
-    );
+  const useMyLocation = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Mapories Camera Permission',
+          message: 'Mapories needs access to location.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        Geolocation.getCurrentPosition((info) =>
+          setLocation({
+            latitude: info.coords.latitude,
+            longitude: info.coords.longitude,
+          }),
+        );
+      } else {
+        ToastAndroid.show(
+          'Please allow location to use current location.',
+          ToastAndroid.LONG,
+        );
+      }
+    } catch (err) {
+      console.warn(err);
+    }
   };
 
   return (
