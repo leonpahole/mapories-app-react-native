@@ -27,12 +27,20 @@ const Main = () => {
         return;
       }
 
+      if (!loggedInUser) {
+        return;
+      }
+
       if (p.data.type === 'chat' && p.data.chatroomId) {
         navigate(ChatStackNavigatorScreens.ChatPM, {
           chatroomId: p.data.chatroomId,
         });
       }
     } else {
+      if (!loggedInUser) {
+        return;
+      }
+
       const currentRoute = navigationRef.current?.getCurrentRoute();
       if (currentRoute) {
         if (p.data && p.data.type === 'chat' && p.data.chatroomId) {

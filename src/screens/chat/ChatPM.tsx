@@ -183,7 +183,7 @@ const ChatPM: React.FC = ({}) => {
             paddingVertical: 6,
           }}>
           <StyledTextInputWithButton
-            placeholder={'Comment...'}
+            placeholder={'Message...'}
             style={{
               borderColor: ColorScheme.grayLight,
               backgroundColor: ColorScheme.white,

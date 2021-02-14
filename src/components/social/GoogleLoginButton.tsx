@@ -1,8 +1,7 @@
 import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
 import React from 'react';
 import {useState} from 'react';
-import {ToastAndroid, TouchableOpacity} from 'react-native';
-import {AccessToken, LoginManager} from 'react-native-fbsdk';
+import {ToastAndroid} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {ColorScheme} from '../../styles/colors';
 import {RoundedButton} from '../styled/Buttons';
