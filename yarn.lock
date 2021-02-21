@@ -6178,6 +6178,11 @@ react-native-animatable@^1.2.4:
   dependencies:
     prop-types "^15.7.2"
 
+react-native-appstate-hook@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/react-native-appstate-hook/-/react-native-appstate-hook-1.0.5.tgz#2cb53bcee170ccd58e49d02d1649229fb263896d"
+  integrity sha512-vwt4ZrBvrxMIJuyzo5D8u/TvazxkJNX7AI6xKAh08LWMfLtIFstnuEzxwKN0joXLITS9NJbC6ayKxUFH2gLNrQ==
+
 react-native-button@^2.3.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/react-native-button/-/react-native-button-2.4.0.tgz#42b487073a7ce7c54ab503f77c6ced1ab95742bf"

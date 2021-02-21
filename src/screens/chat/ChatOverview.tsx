@@ -12,6 +12,7 @@ import {ChatStackNavigatorScreens} from '../../navigation/ChatStackNavigator';
 import {ChatSocketContext} from '../../socket/ChatSocket';
 import {ColorScheme} from '../../styles/colors';
 import PushNotification from 'react-native-push-notification';
+import useAppState from 'react-native-appstate-hook';
 
 const ChatOverview: React.FC = () => {
   const [latestChats, setLatestChats] = useState<LatestChatItem[]>([]);
@@ -23,6 +24,7 @@ const ChatOverview: React.FC = () => {
   const ws = useContext(ChatSocketContext);
 
   const loggedInUser = useLoggedInUser();
+  const {appState} = useAppState();
 
   async function fetchFriends() {
     setLoading(true);
@@ -39,8 +41,12 @@ const ChatOverview: React.FC = () => {
   }
 
   useEffect(() => {
+    if (appState !== 'active') {
+      return;
+    }
+
     fetchFriends();
-  }, []);
+  }, [appState]);
 
   useEffect(() => {
     console.log('Socket changed:', ws?.socketConnected);

@@ -3,6 +3,7 @@ import React, {createContext, useEffect, useState} from 'react';
 import io from 'socket.io-client';
 import {useAccessToken} from '../hooks/useLoggedInUser';
 import {BecomeOnlineMessage, UpdateChatLogMessage} from '../model/Chat';
+import useAppState from 'react-native-appstate-hook';
 
 type ChatSocketContext = {
   socketConnected: boolean;
@@ -27,6 +28,7 @@ export default ({children}: any) => {
   let ws: ChatSocketContext | null = null;
 
   const [socketConnected, setSocketConnected] = useState<boolean>(false);
+  const {appState} = useAppState();
 
   const accessToken = useAccessToken();
 
@@ -38,11 +40,19 @@ export default ({children}: any) => {
       return;
     }
 
+    if (appState !== 'active') {
+      console.log('App in background, not connecting to socket.');
+      return;
+    }
+
     console.log('Connecting to socket');
     socket = io.connect(WS_URL + '/chat', {
       query: {
         token: accessToken,
       },
+      transports: ['websocket'],
+      jsonp: false,
+      forceNew: true,
     });
 
     socket.on('connect', () => {
@@ -50,25 +60,50 @@ export default ({children}: any) => {
       console.log('Socket connected!');
     });
 
+    socket.on('connect_error', (e: any) => {
+      console.log('Socket connect error!');
+      console.log(JSON.stringify(e));
+    });
+
+    socket.on('connect_timeout', (e: any) => {
+      console.log('Socket connect timeout!');
+      console.log(JSON.stringify(e));
+    });
+
+    socket.on('reconnect', (n: number) => {
+      setSocketConnected(true);
+      console.log(`Socket reconnected on attempt ${n}!`);
+    });
+
+    socket.on('reconnect_attempt', () => {
+      console.log('Socket attempting reconnect!');
+    });
+
+    socket.on('reconnecting', (n: number) => {
+      console.log(`Socket attempting reconnect on attempt ${n}!`);
+    });
+
+    socket.on('reconnect_error', (e: any) => {
+      console.log('Socket reconnect error!');
+      console.log(JSON.stringify(e));
+    });
+
+    socket.on('reconnect_failed', () => {
+      console.log('Socket failed reconnect!');
+    });
+
     socket.on('disconnect', () => {
       setSocketConnected(false);
       console.log('Socket disconnected!');
     });
 
-    socket.on('reconnection_attempt', () => {
-      console.log('Socket attempting reconnect!');
-    });
-
-    socket.on('reconnect', () => {
-      setSocketConnected(true);
-      console.log('Socket reconnected!');
-    });
-
     return () => {
       console.log('Socket disconnecting');
+      socket?.removeAllListeners();
       socket?.disconnect();
+      socket = null;
     };
-  }, [accessToken]);
+  }, [accessToken, appState]);
 
   const sendMessage = (chatroomId: string, message: string) => {
     const payload = {

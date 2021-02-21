@@ -2,7 +2,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import jwtDecode from 'jwt-decode';
 import {authTokenKey, refreshToken} from './auth.api';
 import {API_URL} from '@env';
-import {acc} from 'react-native-reanimated';
+import store from '../redux/store';
+import {refreshTokenAction} from '../redux/auth/auth.actions';
 
 const apiUrl = API_URL;
 
@@ -33,6 +34,7 @@ const commonRequest = async <T>(
       try {
         const accessToken = await refreshToken();
         await AsyncStorage.setItem(authTokenKey, accessToken);
+        store.dispatch(refreshTokenAction(accessToken));
         token = accessToken;
       } catch (e) {
         console.log('Refresh error');

@@ -3,6 +3,7 @@ import {
   AuthActionTypes,
   LOGIN_SUCCESS,
   LOGOUT_SUCCESS,
+  REFRESH_TOKEN,
 } from './auth.actionTypes';
 
 interface AuthStateI {
@@ -31,6 +32,11 @@ const authReducer = (
         ...state,
         loggedInUser: undefined,
         accessToken: undefined,
+      };
+    case REFRESH_TOKEN:
+      return {
+        ...state,
+        accessToken: action.payload.accessToken,
       };
     default:
       return state;

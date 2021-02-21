@@ -2,6 +2,7 @@ import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {HeaderBackButton} from '@react-navigation/stack';
 import React, {useContext, useEffect, useState} from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
+import useAppState from 'react-native-appstate-hook';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -45,6 +46,7 @@ const ChatPM: React.FC = ({}) => {
   const ws = useContext(ChatSocketContext);
 
   const navigation = useNavigation<any>();
+  const {appState} = useAppState();
 
   async function fetchChats(doRefresh = false) {
     setLoading(true);
@@ -83,8 +85,8 @@ const ChatPM: React.FC = ({}) => {
   }
 
   useEffect(() => {
-    fetchChats();
-  }, []);
+    fetchChats(true);
+  }, [appState, route.params.chatroomId]);
 
   useEffect(() => {
     if (!ws?.socketConnected) {
@@ -170,7 +172,11 @@ const ChatPM: React.FC = ({}) => {
 
             return null;
           }}
-          ListFooterComponent={() => <Spinner loading={loading} />}
+          ListFooterComponent={() => (
+            <View style={{marginBottom: 10}}>
+              <Spinner loading={loading} />
+            </View>
+          )}
           showsVerticalScrollIndicator={false}
           onEndReachedThreshold={0.5}
           onEndReached={() => {
